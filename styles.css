@@ -40,17 +40,31 @@ section {
   color: #093921;
   margin-top: 2rem;
   padding: 3rem;
-  width: 50vw;
+  width: 40vw;
 }
 
 h1 {  
   font-family: "Montserrat", sans-serif;
+  margin-bottom: 2rem;
+  text-align: center;
 }
 
  .welcome, .storyText{
   font-family: "Montserrat", sans-serif;
   line-height: 1.5;
   margin-bottom: 2rem;
+}
+
+.content-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+}
+
+.storyImg {
+  height: 500px;
+  border-radius: 2rem;
+  filter: opacity(0.8);
 }
 
 .button-container {
@@ -89,3 +103,26 @@ footer {
   left: 1rem;
 }
 
+@media only screen and (max-width: 1700px) {
+  section {
+    width: 50vw;
+  }
+}
+
+@media only screen and (max-width: 1300px) {
+  section {
+    width: 60vw;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  section {
+    width: 80vw;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+ .content-container {
+  flex-wrap: wrap;
+ }
+}
