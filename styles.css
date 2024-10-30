@@ -49,7 +49,7 @@ h1 {
   text-align: center;
 }
 
- .welcome, .storyText{
+ .welcome, #storyText{
   font-family: "Montserrat", sans-serif;
   line-height: 1.5;
   margin-bottom: 2rem;

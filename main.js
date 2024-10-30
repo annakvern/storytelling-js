@@ -18,6 +18,7 @@ function setupEventListeners() {
 }
 
 function storyBricksStart() {
+  
   // firstOption -> storyDragonflyPower()
   // secondOption -> storyGoblinPrank()
 }
