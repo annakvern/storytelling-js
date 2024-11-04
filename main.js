@@ -19,6 +19,11 @@ const catButtons = ["Run, as fast as you can!", "Stay and pet the cat"];
 const goblinTexts = ["Uh oh... It seems that the goblin wasn't as friendly as you had hoped... *gulp*", "I'm sorry my friend, but game's over.", "Do you want to play again?"];
 const goblinButtons = ["Yes", "No"];
 const gameOverTexts = ["Thanks for playing!", "You can close this window."];
+const cloverTexts = ["You come across a soft green patch of clover in the middle of the garden and decide to lie down for a nap.", "After a short while you wake up well rested and ready for new adventure. As you start to look around you, you notice one particularly green and glowy 4-leaf clover. You move a little closer and pick it up.", "Holding the clover in your hand, you feel a strong sense  run through you that this is a special clover. Suddenly, you hear a tiny voice. You look down and see a small ant talking to you, and you lean in.", '"That is a very special clover! Use it wisely, for it will bring you luck and help in any type of situation in this garden, when you need it. You can only use it once!.', "You thank the ant and put the clover in your pocket. Feeling ready for new adventure."];
+const cloverButtons = ["Go left", "Go right"];
+const appleTexts = ["You enjoy your swim a lot more this time. You notice there are several koi fish and you greet them all.", "After a while of swimming, you start feeling tired and especially hungry. You get out of the pond and start looking for something to eat.", "In front of you, you see a shiny red apple, look up and see it must have fallen from the apple tree. Grateful for that, you take a huge bite in the apple, as you hear someone laughing. It was the goblin again, but what's he laughing at? You look at the huge apple (remember you're 5-inch tall)... and see a big worm looking back at you! The goblin tricked you to take a bite in the apple.", "Grunting and spitting, you start walking again..."];
+const appleButtons = ["Continue walking into the garden to look for food", "Look for food in the outskirts of the garden"];
+
 
 /** This is the starting point for the program */
 function main() {
@@ -120,7 +125,7 @@ function storyMudSlope() {
   createParagraphs(mudTexts);
   createButtons(mudButtons);
   option0.onclick = storyGoblinGameOver;
-  option0.onclick = storyPowerClover;
+  option1.onclick = () => storyPowerClover(1);
 }
 
 function storyKoiPower(version) {
@@ -136,8 +141,8 @@ function storyKoiPower(version) {
   }
 
   createButtons(pondButtons);
-  option0.onclick = storyPowerClover;
-  option0.onclick = storyAppleWorm;
+  option0.onclick = () => storyPowerClover(2);
+  option1.onclick = storyAppleWorm;
   powers.push("Ability to breathe under water");
   loadPowers(powers);  
 }
@@ -156,19 +161,46 @@ function storyGoblinGameOver() {
   createButtons(goblinButtons);
   option0.onclick = main;
   option1.onclick = getGameOver;
+  powerBar.innerHTML = '';
 }
 
-function storyPowerClover() {
+function storyPowerClover(version) {
+  storyImg.src = 'assets/images/clover.jpg';
+  createParagraphs(cloverTexts);
+  createButtons(cloverButtons);
+  option0.onclick = storyWateringDevice;
+  option1.onclick = storySneakySnail;
   // remove power flying
-  // add power fourLeafClover
-  // firstOption -> storyWateringDevice()
-  // secondOption -> storySneakySnail()
+
+  if (version === 1 && powers[1] === "Ability to fly for 24 hours") {
+    powers.splice(1, 1);
+  } else if (version === 1 && powers[0] === "Ability to fly for 24 hours") {
+    powers.splice(0, 1);
+  } else {
+    
+  }
+  //powers.pop(); //how do i get the specific index?
+  powers.push("Magical four-leaf clover");
+  loadPowers(powers);
 }
 
 function storyAppleWorm() {
-  // remove power breatheUnderWater
-  // firstOption -> storySneakySnail()
-  // secondOption -> storySuccessGarden()
+  storyImg.src = 'assets/images/apple.jpg';
+  createParagraphs(appleTexts);
+  createButtons(appleButtons);
+
+  if (powers[1] === "Ability to breathe under water") {
+    powers.splice(1, 1);
+  } else if (powers[0] === "Ability to breathe under water") {
+    powers.splice(0, 1);
+  } else {
+    
+  }
+
+  loadPowers(powers);
+  option0.onclick = storySneakySnail;
+  option1.onclick = storySuccessGarden;
+
 }
 
 function storyCatGameOver() {
