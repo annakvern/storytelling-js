@@ -16,6 +16,9 @@ const pondTexts = ["As you enjoy your stroll towards the pond, taking in the bee
 const pondButtons = ["You are tired from all the adventure and see a nice green spot in the middle of the garden where you maybe can get some rest", "You can't wait to try your new power, you go for another swim and this time you can breathe under water and meet all the creatures that live there!"];
 const catTexts = ["As you gaze around the garden you see the end of a  wiggling furry tail behind a big tree to your right. You start to realise that this was not a small furry creature, it was actually a cat! A friendly cat?", 'As you get closer to the wiggly tail, you see that the cat is fast asleep. "Good", you think. You might not have to find out if its a friend or foe...', "Until.. just as you passed it by, it opens one eye to look for the bird that just screeched, but it doesn't focus on the bird when it sees you!", "It licks its mouth and rises up from its nap."];
 const catButtons = ["Run, as fast as you can!", "Stay and pet the cat"];
+const goblinTexts = ["Uh oh... It seems that the goblin wasn't as friendly as you had hoped... *gulp*", "I'm sorry my friend, but game's over.", "Do you want to play again?"];
+const goblinButtons = ["Yes", "No"];
+const gameOverTexts = ["Thanks for playing!", "You can close this window."];
 
 /** This is the starting point for the program */
 function main() {
@@ -148,9 +151,11 @@ function storyCat() {
 }
 
 function storyGoblinGameOver() {
-  // Play again?
-  // firstOption -> Yes
-  // secondOption -> No
+  storyImg.src = 'assets/images/mudEnd.jpg';
+  createParagraphs(goblinTexts);
+  createButtons(goblinButtons);
+  option0.onclick = main;
+  option1.onclick = getGameOver;
 }
 
 function storyPowerClover() {
@@ -204,5 +209,10 @@ function storyGreenhouseGameOver() {
   // Play again?
   // firstOption -> Yes
   // secondOption -> No
+}
+
+function getGameOver() {
+  storyImg.src = 'assets/images/roses.jpg';
+  createParagraphs(gameOverTexts);
 }
 
