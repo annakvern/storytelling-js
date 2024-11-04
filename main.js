@@ -14,6 +14,9 @@ const mudTexts = ["As you get closer to the mud slopes you continue to hear a ca
 const mudButtons = ["Ask the goblin to help you up", "Use your flying power to help you get out of the mud and get to a safer place"];
 const pondTexts = ["As you enjoy your stroll towards the pond, taking in the bees buzzing and the sun's warmth on your skin, you finally find yourself at the edge of the pond.", "You arrive at a pond. Heart beating, sweaty and panting. You look around, but it seems you got rid of the cat.", "You decide to jump in for a refreshing swim.", "What you didn't consider, was that the pond is almost covered in water lilies. As beautiful as they might be, they make it very hard to resurface as you've gone for a dive. You get under a water lily leaf and struggle to get up! You almost lose your conscious when...", "...suddenly a glittering koi fish finds you, puts you on its back and carries you to the surface.", 'Back on land, you thank the fish for saving your life. He replies "Never mind! But just so it does not happen again, I grant you the  ability to breathe under water! Use it well, you can only use it 24 hrs"', "You thank the fish once again and look around you where to proceed to..."];
 const pondButtons = ["You are tired from all the adventure and see a nice green spot in the middle of the garden where you maybe can get some rest", "You can't wait to try your new power, you go for another swim and this time you can breathe under water and meet all the creatures that live there!"];
+const catTexts = ["As you gaze around the garden you see the end of a  wiggling furry tail behind a big tree to your right. You start to realise that this was not a small furry creature, it was actually a cat! A friendly cat?", 'As you get closer to the wiggly tail, you see that the cat is fast asleep. "Good", you think. You might not have to find out if its a friend or foe...', "Until.. just as you passed it by, it opens one eye to look for the bird that just screeched, but it doesn't focus on the bird when it sees you!", "It licks its mouth and rises up from its nap."];
+const catButtons = ["Run, as fast as you can!", "Stay and pet the cat"];
+
 /** This is the starting point for the program */
 function main() {
   loadEnterGarden();
@@ -105,8 +108,8 @@ function storyGoblinPrank() {
   createParagraphs(prankTexts);
   title.innerHTML = ''; 
   createButtons(prankButtons);
-  option0.onclick = () => storyKoiPower(2);
-  option0.onclick = storyCat;
+  option0.onclick = () => storyKoiPower(1);
+  option1.onclick = storyCat;
 }
 
 function storyMudSlope() {
@@ -137,8 +140,11 @@ function storyKoiPower(version) {
 }
 
 function storyCat() {
-  // firstOption -> storyKoiPower(2)
-  // secondOption -> storyCatGameOver()
+  storyImg.src = 'assets/images/cat.jpg';
+  createParagraphs(catTexts);
+  createButtons(catButtons);
+  option0.onclick = () => storyKoiPower(2);
+  option1.onclick = storyCatGameOver;
 }
 
 function storyGoblinGameOver() {
