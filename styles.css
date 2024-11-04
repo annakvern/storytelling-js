@@ -30,6 +30,18 @@ main {
   justify-content: center;
 }
 
+#powerBar {
+  font-family: "Playwrite GB S", cursive;
+  color: pink;
+  text-shadow: #730464 1px 0 10px;
+  padding-bottom: 1rem;
+}
+
+#powerBar p {
+  margin-top: 0;
+  padding-bottom: 1rem;
+}
+
 section {
   border-width: 0px 20px 0px 20px;
   border-style: double;
@@ -89,6 +101,7 @@ button {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   padding: 1rem;
   margin: 2rem 0 1rem 0;
+  max-width: 350px;
 }
 
 button:hover {
