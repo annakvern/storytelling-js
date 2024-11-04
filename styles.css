@@ -35,6 +35,8 @@ main {
   color: pink;
   text-shadow: #730464 1px 0 10px;
   padding-bottom: 1rem;
+  display: flex;
+  justify-content: space-around;
 }
 
 #powerBar p {
@@ -82,6 +84,7 @@ p {
   height: 500px;
   border-radius: 2rem;
   filter: opacity(0.8);
+  max-width: 500px;
 }
 
 #buttonContainer {

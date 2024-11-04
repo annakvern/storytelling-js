@@ -8,8 +8,12 @@ const enterTexts = ["You enter the garden on laid out bricks. You need to take l
 const enterButtons = ["Stay in the sun and go smell the roses ahead", "Go look for the furry thing you saw"];
 const rosesTexts = ["Oh! The roses smell lovely!", "You meet a gorgeous dragonfly by the roses. She tells you she only have life for this one day, and is happy it was such a beautiful one. You nod, and feel a strong compassion for this creature. The dragonfly senses that, and in return, she gives you the power to fly! But use it well, it will only last for 24 hours.", "You kindly thank the stunning dragonfly and look around you. You see a small pond to your right you see a bunch of mud further in to the garden, and hear someone crying for help from the mud slopes."];
 const rosesButtons = ["Go look by the mud slopes to see if you can help the creature in need", "Go to look if there's any koi fish in the pond"];
-const prankTexts = ["As you turn around the edge of the bush and enter the shadowed space, you at first don't find what you were looking for.", "Then! A large SPLASH! of muddy water hits you on top of your head, you look up and see a smirking little goblin hanging from a branch dangling his legs and a bucket.", '"Whoops" says the goblin, and quickly jumps down and runs off.'];
+const prankTexts = ["As you turn around the edge of the bush and enter the shadowed space, you at first don't find what you were looking for.", "Then! A large SPLASH! of muddy water hits you on top of your head, you look up and see a smirking little goblin hanging from a branch dangling his legs and a bucket.", '"Whoops" says the goblin laughing, and quickly jumps down and runs off.'];
 const prankButtons = ["Go wash yourself off in the pond", "Go look for the furry thing you saw before"];
+const mudTexts = ["As you get closer to the mud slopes you continue to hear a call for help, but it's more quiet now. You look around and fear the worst, did the creature get sucked in to the mud? There's no way to find out but to jump in and look for it.", "As you so fearlessly jump in the muddy slopes, you feel the cold mud drag you down and you barely can hold your head above it, and on top of it all, you don't see a creature in need... ", "And then, you look up, on the edge of the hole sits a small goblin, grinning wide as he's obviously enjoying the show."];
+const mudButtons = ["Ask the goblin to help you up", "Use your flying power to help you get out of the mud and get to a safer place"];
+const pondTexts = ["As you enjoy your stroll towards the pond, taking in the bees buzzing and the sun's warmth on your skin, you finally find yourself at the edge of the pond.", "You arrive at a pond. Heart beating, sweaty and panting. You look around, but it seems you got rid of the cat.", "You decide to jump in for a refreshing swim.", "What you didn't consider, was that the pond is almost covered in water lilies. As beautiful as they might be, they make it very hard to resurface as you've gone for a dive. You get under a water lily leaf and struggle to get up! You almost lose your conscious when...", "...suddenly a glittering koi fish finds you, puts you on its back and carries you to the surface.", 'Back on land, you thank the fish for saving your life. He replies "Never mind! But just so it does not happen again, I grant you the  ability to breathe under water! Use it well, you can only use it 24 hrs"', "You thank the fish once again and look around you where to proceed to..."];
+const pondButtons = ["You are tired from all the adventure and see a nice green spot in the middle of the garden where you maybe can get some rest", "You can't wait to try your new power, you go for another swim and this time you can breathe under water and meet all the creatures that live there!"];
 /** This is the starting point for the program */
 function main() {
   loadEnterGarden();
@@ -39,9 +43,10 @@ function createParagraphs(paragraphs) {
 
   container.innerHTML = '';
 
-  for (const p of paragraphs) {
+  for (const [index, p] of paragraphs.entries()) {
     const paragraph = document.createElement('p');
     paragraph.textContent = p;
+    paragraph.id = `paragraph${index}`;
     container.appendChild(paragraph); 
   }
 }
@@ -63,7 +68,7 @@ function createButtons(buttonTexts) {
 function loadPowers(powers) {
   const container = document.getElementById('powerBar');
 
-  //container.innerHTML = '';
+  container.innerHTML = '';
 
   for (const [index, text] of powers.entries()) { // I need to be able to distinguish the powers and set specific id's to assign powers specific text
     const showPower = document.createElement('p');
@@ -105,19 +110,30 @@ function storyGoblinPrank() {
 }
 
 function storyMudSlope() {
-  // firstOption -> storyGoblinGameOver()
-  // secondOption -> storyPowerClover()
+  storyImg.src = 'assets/images/mud.jpg';
+  createParagraphs(mudTexts);
+  createButtons(mudButtons);
+  option0.onclick = storyGoblinGameOver;
+  option0.onclick = storyPowerClover;
 }
 
 function storyKoiPower(version) {
+  storyImg.src = 'assets/images/pond.jpg';
+  createParagraphs(pondTexts);
+
   if (version === 1) {
-    // paragraph1 =  As you enjoy your stroll towards the pond, taking in the bees buzzing and the sun's warmth on your skin, you finally find yourself at the edge of the pond. 
+    console.log("version 1");
+    paragraph1.style.display = 'none'; // hides the second entry in the array because it is used when coming from another scene
   } else {
-    // paragraph1 =  You arrive at a pond. Heart beating, sweaty and panting. You look around, but it seems you got rid of the cat.
+    console.log("Version 2");
+    paragraph0.style.display = 'none';
   }
-  // add power breatheUnderWater
-  // firstOption -> storyPowerClover()
-  // secondOption -> storyAppleWorm()
+
+  createButtons(pondButtons);
+  option0.onclick = storyPowerClover;
+  option0.onclick = storyAppleWorm;
+  powers.push("Ability to breathe under water");
+  loadPowers(powers);  
 }
 
 function storyCat() {
