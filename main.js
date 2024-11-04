@@ -17,13 +17,13 @@ const pondButtons = ["You are tired from all the adventure and see a nice green 
 const catTexts = ["As you gaze around the garden you see the end of a  wiggling furry tail behind a big tree to your right. You start to realise that this was not a small furry creature, it was actually a cat! A friendly cat?", 'As you get closer to the wiggly tail, you see that the cat is fast asleep. "Good", you think. You might not have to find out if its a friend or foe...', "Until.. just as you passed it by, it opens one eye to look for the bird that just screeched, but it doesn't focus on the bird when it sees you!", "It licks its mouth and rises up from its nap."];
 const catButtons = ["Run, as fast as you can!", "Stay and pet the cat"];
 const goblinTexts = ["Uh oh... It seems that the goblin wasn't as friendly as you had hoped... *gulp*", "I'm sorry my friend, but game's over.", "Do you want to play again?"];
-const goblinButtons = ["Yes", "No"];
+const endButtons = ["Yes", "No"];
 const gameOverTexts = ["Thanks for playing!", "You can close this window."];
 const cloverTexts = ["You come across a soft green patch of clover in the middle of the garden and decide to lie down for a nap.", "After a short while you wake up well rested and ready for new adventure. As you start to look around you, you notice one particularly green and glowy 4-leaf clover. You move a little closer and pick it up.", "Holding the clover in your hand, you feel a strong sense  run through you that this is a special clover. Suddenly, you hear a tiny voice. You look down and see a small ant talking to you, and you lean in.", '"That is a very special clover! Use it wisely, for it will bring you luck and help in any type of situation in this garden, when you need it. You can only use it once!.', "You thank the ant and put the clover in your pocket. Feeling ready for new adventure."];
 const cloverButtons = ["Go left", "Go right"];
 const appleTexts = ["You enjoy your swim a lot more this time. You notice there are several koi fish and you greet them all.", "After a while of swimming, you start feeling tired and especially hungry. You get out of the pond and start looking for something to eat.", "In front of you, you see a shiny red apple, look up and see it must have fallen from the apple tree. Grateful for that, you take a huge bite in the apple, as you hear someone laughing. It was the goblin again, but what's he laughing at? You look at the huge apple (remember you're 5-inch tall)... and see a big worm looking back at you! The goblin tricked you to take a bite in the apple.", "Grunting and spitting, you start walking again..."];
 const appleButtons = ["Continue walking into the garden to look for food", "Look for food in the outskirts of the garden"];
-
+const catEndTexts = ["Uh oh... It seems that the cat wasn't as friendly as you had hoped... *gulp*", "I'm sorry my friend, but game's over.", "Do you want to play again?" ];
 
 /** This is the starting point for the program */
 function main() {
@@ -158,7 +158,7 @@ function storyCat() {
 function storyGoblinGameOver() {
   storyImg.src = 'assets/images/mudEnd.jpg';
   createParagraphs(goblinTexts);
-  createButtons(goblinButtons);
+  createButtons(endButtons);
   option0.onclick = main;
   option1.onclick = getGameOver;
   powerBar.innerHTML = '';
@@ -204,9 +204,13 @@ function storyAppleWorm() {
 }
 
 function storyCatGameOver() {
-  // Play again?
-  // firstOption -> Yes
-  // secondOption -> No
+  storyImg.src = 'assets/images/catEnd.jpg';
+  createParagraphs(catEndTexts);
+  createButtons(endButtons);
+
+  option0.onclick = main;
+  option1.onclick = getGameOver;
+  powerBar.innerHTML = '';
 }
 
 function storyWateringDevice() {
