@@ -24,6 +24,9 @@ const cloverButtons = ["Go left", "Go right"];
 const appleTexts = ["You enjoy your swim a lot more this time. You notice there are several koi fish and you greet them all.", "After a while of swimming, you start feeling tired and especially hungry. You get out of the pond and start looking for something to eat.", "In front of you, you see a shiny red apple, look up and see it must have fallen from the apple tree. Grateful for that, you take a huge bite in the apple, as you hear someone laughing. It was the goblin again, but what's he laughing at? You look at the huge apple (remember you're 5-inch tall)... and see a big worm looking back at you! The goblin tricked you to take a bite in the apple.", "Grunting and spitting, you start walking again..."];
 const appleButtons = ["Continue walking into the garden to look for food", "Look for food in the outskirts of the garden"];
 const catEndTexts = ["Uh oh... It seems that the cat wasn't as friendly as you had hoped... *gulp*", "I'm sorry my friend, but game's over.", "Do you want to play again?" ];
+const wateringTexts = ["You come across a grass watering device, only as you're so tiny, the watering device is huge and causes your whole world to flood.", "You find yourself in the middle of chaos. There are bumblebees, bees and flies, dragonflies and other insects that got caught in the water and are screaming for help. You decide to do the good thing and use your breathe-under-water skill that you received from the koi fish to save all the insects.", "Once all of them are on dry land (or air, rather) again, you can continue your journey through the garden."];
+const wateringButtons = ["You're hungry and start looking for something eatable in the outskirts of the garden", "You're hungry for more adventure and walk straight for the haunted greenhouse"];
+
 
 /** This is the starting point for the program */
 function main() {
@@ -179,7 +182,6 @@ function storyPowerClover(version) {
   } else {
     
   }
-  //powers.pop(); //how do i get the specific index?
   powers.push("Magical four-leaf clover");
   loadPowers(powers);
 }
@@ -214,9 +216,22 @@ function storyCatGameOver() {
 }
 
 function storyWateringDevice() {
-  // remove power breatheUnderWater
-  // firstOption -> storySuccessGarden()
-  // secondOption -> storyGreenhouse()
+  storyImg.src = 'assets/images/watering.jpg';
+  createParagraphs(wateringTexts);
+  createButtons(wateringButtons);
+  option0.onclick = storySuccessGarden;
+  option1.onclick = storyGreenhouse;
+  // remove power flying
+
+  if (powers[1] === "Ability to breathe under water") {
+    powers.splice(1, 1);
+  } else if (powers[0] === "Ability to breathe under water") {
+    powers.splice(0, 1);
+  } else {
+    
+  }
+  
+  loadPowers(powers);
 }
 
 function storySneakySnail() {
