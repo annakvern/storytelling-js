@@ -3,26 +3,28 @@
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;
   background: linear-gradient(#70aa81, #ffffff);
 }
 
 header {
   color: white;
   font-size: 2rem;
-  height: 7rem;
+  height: 5rem;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 i {
-  padding: 1.5rem;
+  padding: 0 1.5rem;
   text-shadow: #093921 1px 0 10px;
 }
 
 .logotype {
   font-family: "Playwrite GB S", cursive;
   text-shadow: #093921 1px 0 10px;
+  margin: 0;
 }
 
 main {
@@ -48,16 +50,15 @@ section {
   border-width: 0px 20px 0px 20px;
   border-style: double;
   border-color: #093921;
-  border-radius:40px 40px 60px 60px;
-  -moz-border-radius:40px 40px 60px 60px;
-  -webkit-border-radius:40px 40px 60px 60px;
+  border-radius: 40px 40px 60px 60px;
+  -moz-border-radius: 40px 40px 60px 60px;
+  -webkit-border-radius: 40px 40px 60px 60px;
   color: #093921;
-  margin-top: 2rem;
   padding: 3rem;
   width: 40vw;
 }
 
-h1 {  
+h1 {
   font-family: "Montserrat", sans-serif;
   margin-bottom: 2rem;
   text-align: center;
@@ -67,7 +68,7 @@ p {
   margin-top: 2rem;
 }
 
- #textContainer{
+#textContainer {
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   line-height: 1.5;
@@ -95,13 +96,14 @@ p {
 
 button {
   background-color: #eefbf0;
-  color:#093921;
+  color: #093921;
   font-family: "Montserrat", sans-serif;
   font-size: 1rem;
   font-weight: 600;
   border: 0;
   border-radius: 2rem 0 2rem 0;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   padding: 1rem;
   margin: 2rem 0 1rem 0;
   max-width: 350px;
@@ -109,13 +111,13 @@ button {
 
 button:hover {
   background-color: #66996d;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
 button:active {
   background-color: #205827;
 }
-
 
 footer {
   font-family: "Montserrat", sans-serif;
@@ -126,7 +128,7 @@ footer {
 
 @media only screen and (max-width: 1700px) {
   section {
-    width: 50vw;
+    width: 60vw;
   }
 }
 
@@ -143,7 +145,7 @@ footer {
 }
 
 @media only screen and (max-width: 800px) {
- .content-container {
-  flex-wrap: wrap;
- }
+  .content-container {
+    flex-wrap: wrap;
+  }
 }
