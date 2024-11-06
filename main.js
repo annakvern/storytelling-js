@@ -95,7 +95,7 @@ function storyBricksStart() {
 }
 
 function storyDragonflyPower() {
-  storyImg.src = "assets/images/roses.jpg";
+  storyImg.src = "assets/images/dragonfly.jpg";
 
   const rosesTexts = [
     "Oh! The roses smell lovely!",
@@ -336,7 +336,7 @@ function storySneakySnail() {
   } else {
     option0.style.display = "none";
   }
-  option0.onclick = storyGreenhouse;
+  option0.onclick = () => storyGreenhouse(1);
   option1.onclick = storyPoisonGameOver;
 }
 
@@ -374,7 +374,7 @@ function storyPoisonGameOver() {
   powerBar.innerHTML = "";
 }
 
-function storyGreenhouse() {
+function storyGreenhouse(version) {
   storyImg.src = "assets/images/greenhouse.jpg";
 
   const greenhouseTexts = [
@@ -387,8 +387,27 @@ function storyGreenhouse() {
     "Save myself using my 4-leaf clover power",
     "Uh oh, I can't get out",
   ];
+
   createParagraphs(greenhouseTexts);
   createButtons(greenhouseButtons);
+
+  //Checks which scene the player enters this scene from and removes power if they come from verson 1
+  if (version === 1 && powers[1] === "Magical four-leaf clover") {
+    powers.splice(1, 1);
+    console.log("1");
+  } else if (version === 1 && powers[0] === "Magical four-leaf clover") {
+    powers.splice(0, 1);
+    console.log("2");
+  } else if (version === 1 && powers[2] === "Magical four-leaf clover") {
+    powers.pop();
+    console.log("3");
+  } else {
+  }
+
+  // re-load the power array
+  loadPowers(powers);
+
+  // Checks if the player still has the four-leaf clover
 
   if (powers.includes("Magical four-leaf clover")) {
     option1.style.display = "none";
@@ -400,9 +419,19 @@ function storyGreenhouse() {
 }
 
 function storyGreenhouseGameOver() {
-  // Play again?
-  // firstOption -> Yes
-  // secondOption -> No
+  storyImg.src = "assets/images/wasps.jpg";
+
+  const greenhouseGameOverTexts = [
+    "Unfortunately, without a 4-leaf clover the wasps will not ever let you out of the greenhouse again...*gulp*",
+    "Game over.",
+    "Do you want to play again?",
+  ];
+  createParagraphs(greenhouseGameOverTexts);
+  createButtons(endButtons);
+
+  option0.onclick = main;
+  option1.onclick = getGameOver;
+  powerBar.innerHTML = "";
 }
 
 function getGameOver() {
