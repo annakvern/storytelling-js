@@ -5,13 +5,16 @@ const endButtons = ["Yes", "No"];
 
 /** This is the starting point for the program */
 function main() {
+  localStorage.clear();
   loadEnterGarden();
+  loadPlayerName();
+  setupEventListeners();
 }
 
 /** Register all events for buttons and other ui elements */
 function setupEventListeners() {
-  //zoom.onclick = toggleZoom;
-  // sätt upp fler knappar så dom klickbara.
+  const nameForm = document.getElementById("nameForm");
+  nameForm.addEventListener("submit", saveName);
 }
 
 /** Load starting scene with welcome message, story and option to enter garden */
@@ -25,12 +28,61 @@ function loadEnterGarden() {
   const introTexts = [
     "A garden with beautiful flowers, delicious fruit and vegetables, slimey slugs and a haunted greenhouse. Never mind the tricky goblins that run around and try making a fuss of everything...",
     "You are a friendly 5-inch tall mini human-ish creature. You have all the attributes of a normal human, but if you're lucky, you might run into magic creatures in the garden that gives you powers.",
-    "Please, my dear, enter!",
+    // "Please, my dear, enter!",
   ];
   const introButtons = ["Enter garden"];
+
   createParagraphs(introTexts);
   createButtons(introButtons);
+  getPlayerName();
   option0.onclick = storyBricksStart;
+}
+
+function getPlayerName() {
+  const input = document.createElement("input");
+  input.id = "nameInput";
+  input.placeholder = "What is your name?";
+  const form = document.getElementById("nameForm");
+  form.appendChild(input);
+  const submitButton = document.createElement("button");
+  submitButton.id = "submitButton";
+  submitButton.type = "submit";
+  submitButton.textContent = "Submit";
+  submitButton.style.marginLeft = "1.5rem";
+  form.appendChild(submitButton);
+}
+
+function saveName(event) {
+  event.preventDefault();
+  const nameInput = document.getElementById("nameInput");
+  localStorage.setItem("name", nameInput.value);
+  loadPlayerName();
+}
+
+function loadPlayerName() {
+  const name = localStorage.getItem("name");
+  const container = document.getElementById("greeting");
+
+  container.innerHTML = "";
+
+  if (name) {
+    const playerGreeting = document.createElement("p");
+    playerGreeting.textContent =
+      "Please, my dear " + name + ", enter if you dare!";
+    container.appendChild(playerGreeting);
+    disableFormAndButton(playerGreeting);
+  }
+  nameForm.reset();
+}
+
+function disableFormAndButton(message) {
+  const nameInput = document.getElementById("nameInput");
+  const submitButton = document.getElementById("submitButton");
+
+  if (message !== "") {
+    nameInput.placeholder = "";
+    submitButton.className = "btn-disabled";
+  }
 }
 
 /** Create as many paragraphs per story that's defined in it's specific paragraphs array */
@@ -77,6 +129,8 @@ function loadPowers(powers) {
 }
 /** Displays the starting story with choices in the story */
 function storyBricksStart() {
+  nameForm.innerHTML = "";
+  greeting.innerHTML = "";
   const enterTexts = [
     "You enter the garden on laid out bricks. You need to take large steps over the cracks between the bricks not to fall. It's a sunny and warm day with a light breeze. It is indeed enjoyable for most creatures.",
     "Looking around you see; buzzing bees collecting nectar on the flowers, hard-working ants carrying material for their home, and oh - what's that? You think you saw something furry in the shadows behind the bush to the right.",
@@ -214,6 +268,8 @@ function storyGoblinGameOver() {
   option0.onclick = main;
   option1.onclick = getGameOver;
   powerBar.innerHTML = "";
+  greeting.innerHTML = "";
+  localStorage.removeItem = "name";
 }
 
 function storyPowerClover(version) {
@@ -285,6 +341,8 @@ function storyCatGameOver() {
   option0.onclick = main;
   option1.onclick = getGameOver;
   powerBar.innerHTML = "";
+  greeting.innerHTML = "";
+  localStorage.removeItem = "name";
 }
 
 function storyWateringDevice() {
@@ -371,7 +429,9 @@ function storyPoisonGameOver() {
 
   option0.onclick = main;
   option1.onclick = getGameOver;
+  greeting.innerHTML = "";
   powerBar.innerHTML = "";
+  localStorage.removeItem = "name";
 }
 
 function storyGreenhouse(version) {
@@ -432,11 +492,16 @@ function storyGreenhouseGameOver() {
   option0.onclick = main;
   option1.onclick = getGameOver;
   powerBar.innerHTML = "";
+  greeting.innerHTML = "";
+  localStorage.removeItem = "name";
 }
 
 function getGameOver() {
   const gameOverTexts = ["Thanks for playing!", "You can close this window."];
-
+  const gameOverButtons = ["OK, close window"];
   storyImg.src = "assets/images/roses.jpg";
   createParagraphs(gameOverTexts);
+  createButtons(gameOverButtons);
+  localStorage.removeItem = "name";
+  option0.onclick = window.close;
 }

@@ -55,7 +55,7 @@ section {
   -webkit-border-radius: 40px 40px 60px 60px;
   color: #093921;
   padding: 3rem;
-  width: 40vw;
+  width: 60vw;
 }
 
 h1 {
@@ -86,6 +86,23 @@ p {
   border-radius: 2rem;
   filter: opacity(0.8);
   max-width: 500px;
+}
+
+#nameInput {
+  height: 24px;
+  width: 200px;
+  font-size: 1rem;
+  font-family: "Montserrat", sans-serif;
+  padding: 10px;
+  border: 2px solid #74a37b;
+  border-radius: 10px;
+}
+
+#greeting {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 2rem;
 }
 
 #buttonContainer {
@@ -119,6 +136,12 @@ button:active {
   background-color: #205827;
 }
 
+.btn-disabled {
+  cursor: not-allowed;
+  background-color: #cccccc;
+  color: #ffffff;
+}
+
 footer {
   font-family: "Montserrat", sans-serif;
   position: absolute;
@@ -128,7 +151,7 @@ footer {
 
 @media only screen and (max-width: 1700px) {
   section {
-    width: 60vw;
+    width: 70vw;
   }
 }
 
