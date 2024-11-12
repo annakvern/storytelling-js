@@ -35,9 +35,9 @@ function loadEnterGarden() {
   createParagraphs(introTexts);
   createButtons(introButtons);
   getPlayerName();
-  option0.onclick = storyBricksStart;
+  option0.onclick = sceneBricksStart;
 }
-
+/** Inserts an input form field that takes a name and a button that submits it */
 function getPlayerName() {
   const input = document.createElement("input");
   input.id = "nameInput";
@@ -51,7 +51,7 @@ function getPlayerName() {
   submitButton.style.marginLeft = "1.5rem";
   form.appendChild(submitButton);
 }
-
+/** Saves the name entered by the player to localStorage */
 function saveName(event) {
   event.preventDefault();
   const nameInput = document.getElementById("nameInput");
@@ -59,6 +59,7 @@ function saveName(event) {
   loadPlayerName();
 }
 
+/** Loads the Player name into a greeting before entering the garden */
 function loadPlayerName() {
   const name = localStorage.getItem("name");
   const container = document.getElementById("greeting");
@@ -74,13 +75,14 @@ function loadPlayerName() {
   }
   nameForm.reset();
 }
-
+/** Disabels the form input field and button if a greeting message exist */
 function disableFormAndButton(message) {
   const nameInput = document.getElementById("nameInput");
   const submitButton = document.getElementById("submitButton");
 
   if (message !== "") {
     nameInput.placeholder = "";
+    nameInput.disabled = true;
     submitButton.className = "btn-disabled";
   }
 }
@@ -113,7 +115,7 @@ function createButtons(buttonTexts) {
     container.appendChild(option);
   }
 }
-
+/** Loads and updates the power-bar */
 function loadPowers(powers) {
   const container = document.getElementById("powerBar");
 
@@ -127,8 +129,8 @@ function loadPowers(powers) {
     container.appendChild(showPower);
   }
 }
-/** Displays the starting story with choices in the story */
-function storyBricksStart() {
+/** Displays the starting scene with choices where to go next */
+function sceneBricksStart() {
   nameForm.innerHTML = "";
   greeting.innerHTML = "";
   const enterTexts = [
@@ -144,11 +146,11 @@ function storyBricksStart() {
   createParagraphs(enterTexts);
   title.innerHTML = "";
   createButtons(enterButtons);
-  option0.onclick = storyDragonflyPower;
-  option1.onclick = storyGoblinPrank;
+  option0.onclick = sceneDragonflyPower;
+  option1.onclick = sceneGoblinPrank;
 }
-
-function storyDragonflyPower() {
+/** Displays the Dragonfly scene with choices where to go next */
+function sceneDragonflyPower() {
   storyImg.src = "assets/images/dragonfly.jpg";
 
   const rosesTexts = [
@@ -163,13 +165,13 @@ function storyDragonflyPower() {
   createParagraphs(rosesTexts);
   title.innerHTML = "";
   createButtons(rosesButtons);
-  option0.onclick = storyMudSlope;
-  option1.onclick = () => storyKoiPower(1); // want to show the next story differently depending on where you come from
+  option0.onclick = sceneMudSlope;
+  option1.onclick = () => sceneKoiPower(1); // want to show the next story differently depending on where you come from
   powers.push("Ability to fly for 24 hours"); // add power flying
   loadPowers(powers);
 }
-
-function storyGoblinPrank() {
+/** Displays the scene with the Goblin with choices where to go next */
+function sceneGoblinPrank() {
   storyImg.src = "assets/images/bush.jpg";
 
   const prankTexts = [
@@ -184,11 +186,11 @@ function storyGoblinPrank() {
   createParagraphs(prankTexts);
   title.innerHTML = "";
   createButtons(prankButtons);
-  option0.onclick = () => storyKoiPower(1);
-  option1.onclick = storyCat;
+  option0.onclick = () => sceneKoiPower(1);
+  option1.onclick = sceneCatMeeting;
 }
-
-function storyMudSlope() {
+/** Displays the scene where the player get stuck in mud with choices where to go next */
+function sceneMudSlope() {
   storyImg.src = "assets/images/mud.jpg";
 
   const mudTexts = [
@@ -202,11 +204,11 @@ function storyMudSlope() {
   ];
   createParagraphs(mudTexts);
   createButtons(mudButtons);
-  option0.onclick = storyGoblinGameOver;
-  option1.onclick = () => storyPowerClover(1);
+  option0.onclick = sceneGoblinGameOver;
+  option1.onclick = () => scenePowerClover(1);
 }
-
-function storyKoiPower(version) {
+/** Displays the Koi fish scene with choices where to go next */
+function sceneKoiPower(version) {
   storyImg.src = "assets/images/pond.jpg";
 
   const pondTexts = [
@@ -233,13 +235,13 @@ function storyKoiPower(version) {
   }
 
   createButtons(pondButtons);
-  option0.onclick = () => storyPowerClover(2);
-  option1.onclick = storyAppleWorm;
+  option0.onclick = () => scenePowerClover(2);
+  option1.onclick = sceneAppleWorm;
   powers.push("Ability to breathe under water");
   loadPowers(powers);
 }
-
-function storyCat() {
+/** Displays the Cat scene with choices where to go next */
+function sceneCatMeeting() {
   storyImg.src = "assets/images/cat.jpg";
 
   const catTexts = [
@@ -251,11 +253,11 @@ function storyCat() {
   const catButtons = ["Run, as fast as you can!", "Stay and pet the cat"];
   createParagraphs(catTexts);
   createButtons(catButtons);
-  option0.onclick = () => storyKoiPower(2);
-  option1.onclick = storyCatGameOver;
+  option0.onclick = () => sceneKoiPower(2);
+  option1.onclick = sceneCatGameOver;
 }
-
-function storyGoblinGameOver() {
+/** Displays a scene where the player reach game over */
+function sceneGoblinGameOver() {
   storyImg.src = "assets/images/mudEnd.jpg";
 
   const goblinGameOverTexts = [
@@ -271,8 +273,8 @@ function storyGoblinGameOver() {
   greeting.innerHTML = "";
   localStorage.removeItem = "name";
 }
-
-function storyPowerClover(version) {
+/** Displays the scene where player get a magical four-leaf clover with choices where to go next */
+function scenePowerClover(version) {
   storyImg.src = "assets/images/clover.jpg";
 
   const cloverTexts = [
@@ -285,8 +287,8 @@ function storyPowerClover(version) {
   const cloverButtons = ["Go left", "Go right"];
   createParagraphs(cloverTexts);
   createButtons(cloverButtons);
-  option0.onclick = storyWateringDevice;
-  option1.onclick = storySneakySnail;
+  option0.onclick = sceneWateringDevice;
+  option1.onclick = sceneSneakySnail;
   // remove power flying
 
   if (version === 1 && powers[1] === "Ability to fly for 24 hours") {
@@ -298,8 +300,8 @@ function storyPowerClover(version) {
   powers.push("Magical four-leaf clover");
   loadPowers(powers);
 }
-
-function storyAppleWorm() {
+/** Displays the apple and worm scene with choices where to go next */
+function sceneAppleWorm() {
   storyImg.src = "assets/images/apple.jpg";
 
   const appleTexts = [
@@ -323,11 +325,11 @@ function storyAppleWorm() {
   }
 
   loadPowers(powers);
-  option0.onclick = storySneakySnail;
-  option1.onclick = storySuccessGarden;
+  option0.onclick = sceneSneakySnail;
+  option1.onclick = sceneSuccessGarden;
 }
-
-function storyCatGameOver() {
+/** Displays a scene where the player reach game over */
+function sceneCatGameOver() {
   storyImg.src = "assets/images/catEnd.jpg";
 
   const catGameOverTexts = [
@@ -344,8 +346,8 @@ function storyCatGameOver() {
   greeting.innerHTML = "";
   localStorage.removeItem = "name";
 }
-
-function storyWateringDevice() {
+/** Displays the watering  scene with choices where to go next */
+function sceneWateringDevice() {
   storyImg.src = "assets/images/watering.jpg";
 
   const wateringTexts = [
@@ -359,8 +361,8 @@ function storyWateringDevice() {
   ];
   createParagraphs(wateringTexts);
   createButtons(wateringButtons);
-  option0.onclick = storySuccessGarden;
-  option1.onclick = storyGreenhouse;
+  option0.onclick = sceneSuccessGarden;
+  option1.onclick = sceneGreenhouse;
   // remove power flying
 
   if (powers[1] === "Ability to breathe under water") {
@@ -372,8 +374,8 @@ function storyWateringDevice() {
 
   loadPowers(powers);
 }
-
-function storySneakySnail() {
+/** Displays the sneaky snail scene with choices where to go next */
+function sceneSneakySnail() {
   storyImg.src = "assets/images/snail.jpg";
 
   const sneakySnailTexts = [
@@ -394,11 +396,11 @@ function storySneakySnail() {
   } else {
     option0.style.display = "none";
   }
-  option0.onclick = () => storyGreenhouse(1);
-  option1.onclick = storyPoisonGameOver;
+  option0.onclick = () => sceneGreenhouse(1);
+  option1.onclick = scenePoisonGameOver;
 }
-
-function storySuccessGarden() {
+/** Displays the success finishing scene where the player reach the end of the game! */
+function sceneSuccessGarden() {
   storyImg.src = "assets/images/end.jpg";
 
   const successEndTexts = [
@@ -415,8 +417,8 @@ function storySuccessGarden() {
   option1.onclick = getGameOver;
   powerBar.innerHTML = "";
 }
-
-function storyPoisonGameOver() {
+/** Displays a scene where the player reach game over */
+function scenePoisonGameOver() {
   storyImg.src = "assets/images/poison.jpg";
 
   const poisonGameOverTexts = [
@@ -433,8 +435,8 @@ function storyPoisonGameOver() {
   powerBar.innerHTML = "";
   localStorage.removeItem = "name";
 }
-
-function storyGreenhouse(version) {
+/** Displays the Greenhouse scene with choices where to go next */
+function sceneGreenhouse(version) {
   storyImg.src = "assets/images/greenhouse.jpg";
 
   const greenhouseTexts = [
@@ -474,10 +476,10 @@ function storyGreenhouse(version) {
   } else {
     option0.style.display = "none";
   }
-  option0.onclick = storySuccessGarden;
+  option0.onclick = sceneSuccessGarden;
   option1.onclick = storyGreenhouseGameOver;
 }
-
+/** Displays a scene where the player reach game over */
 function storyGreenhouseGameOver() {
   storyImg.src = "assets/images/wasps.jpg";
 
@@ -495,7 +497,7 @@ function storyGreenhouseGameOver() {
   greeting.innerHTML = "";
   localStorage.removeItem = "name";
 }
-
+/** Displays the final game over scene when the player don't want to play again */
 function getGameOver() {
   const gameOverTexts = ["Thanks for playing!", "You can close this window."];
   const gameOverButtons = ["OK, close window"];
