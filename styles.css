@@ -98,11 +98,18 @@ p {
   border-radius: 10px;
 }
 
-#greeting {
+#greeting,
+#currentlyPlaying {
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   line-height: 1.5;
   margin-bottom: 2rem;
+}
+
+.currentlyPlaying {
+  text-align: center;
+  color: rgb(250, 4, 103);
+  text-shadow: #eefbf0 1px 0 5px;
 }
 
 #buttonContainer {
@@ -153,9 +160,6 @@ footer {
   height: 3rem;
   width: 100vw;
   text-align: center;
-  /* position: absolute;
-  bottom: 1rem;
-  left: 1rem; */
   margin-top: 2rem;
 }
 

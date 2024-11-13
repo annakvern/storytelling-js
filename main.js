@@ -2,9 +2,11 @@
 window.addEventListener("DOMContentLoaded", main);
 let powers = [];
 let scene = "";
+let player = "";
 const endButtons = ["Yes", "No"];
 
 let gameState = {
+  playerName: player,
   currentScene: scene,
   powersGathered: powers,
 };
@@ -16,9 +18,9 @@ function main(status) {
   }
 
   const savedState = localStorage.getItem("gameState");
-  console.log(savedState);
   if (savedState) {
     gameState = JSON.parse(savedState);
+    player = gameState.playerName || "";
     powers = gameState.powersGathered || [];
     scene = gameState.currentScene || "";
     if (scene && typeof window[scene] === "function") {
@@ -29,7 +31,7 @@ function main(status) {
   } else {
     loadEnterGarden();
   }
-  loadPlayerName();
+  loadPlayerNameAndGreeting();
   setupEventListeners();
 }
 
@@ -41,6 +43,7 @@ function setupEventListeners() {
 
 /** Load starting scene with welcome message, story and option to enter garden */
 function loadEnterGarden() {
+  scene = "loadEnterGarden";
   powers = [];
   storyImg.src = "assets/images/start.jpg";
   const h1 = document.createElement("h1");
@@ -57,6 +60,7 @@ function loadEnterGarden() {
   createParagraphs(introTexts);
   createButtons(introButtons);
   getPlayerName();
+  saveGameState();
   option0.onclick = sceneBricksStart;
 }
 /** Inserts an input form field that takes a name and a button that submits it */
@@ -77,18 +81,25 @@ function getPlayerName() {
 function saveName(event) {
   event.preventDefault();
   const nameInput = document.getElementById("nameInput");
-  localStorage.setItem("name", nameInput.value);
-  loadPlayerName();
+  let gameState = JSON.parse(localStorage.getItem("gameState")) || {};
+  gameState.playerName = nameInput.value;
+  localStorage.setItem("gameState", JSON.stringify(gameState));
+
+  localStorage.setItem("player", nameInput.value);
+  loadPlayerNameAndGreeting();
 }
 
 /** Loads the Player name into a greeting before entering the garden */
-function loadPlayerName() {
-  const name = localStorage.getItem("name");
+function loadPlayerNameAndGreeting() {
+  const name = localStorage.getItem("player");
   const container = document.getElementById("greeting");
 
   container.innerHTML = "";
 
   if (name) {
+    const currentPlayer = document.createElement("p");
+    currentPlayer.textContent = "Currently in garden: " + name;
+    currentlyPlaying.appendChild(currentPlayer);
     const playerGreeting = document.createElement("p");
     playerGreeting.textContent =
       "Please, my dear " + name + ", enter if you dare!";
@@ -151,8 +162,9 @@ function loadAndRenderPowers(powers) {
     container.appendChild(showPower);
   }
 }
-
+/** Saves the name, scene and powers array into a gameState */
 function saveGameState() {
+  gameState.playerName = player;
   gameState.currentScene = scene;
   gameState.powersGathered = powers;
   localStorage.setItem("gameState", JSON.stringify(gameState));
@@ -172,7 +184,6 @@ function removePowerFromLocalStorage(powerName) {
 /** Displays the starting scene with choices where to go next */
 function sceneBricksStart() {
   scene = "sceneBricksStart";
-  saveGameState();
 
   nameForm.innerHTML = "";
   greeting.innerHTML = "";
@@ -188,6 +199,7 @@ function sceneBricksStart() {
   storyImg.src = "assets/images/enter.jpg";
   createParagraphs(enterTexts);
   title.innerHTML = "";
+  saveGameState();
   createButtons(enterButtons);
   option0.onclick = sceneDragonflyPower;
   option1.onclick = sceneGoblinPrank;
@@ -328,6 +340,7 @@ function sceneGoblinGameOver() {
   powers = [];
   powerBar.innerHTML = "";
   greeting.innerHTML = "";
+  currentlyPlaying.innerHTML = "";
   saveGameState();
 }
 /** Displays the scene where player get a magical four-leaf clover with choices where to go next */
@@ -405,6 +418,7 @@ function sceneCatGameOver() {
   option1.onclick = getGameOver;
   powerBar.innerHTML = "";
   greeting.innerHTML = "";
+  currentlyPlaying.innerHTML = "";
   saveGameState();
 }
 /** Displays the watering  scene with choices where to go next */
@@ -480,6 +494,7 @@ function sceneSuccessGarden() {
   option1.onclick = getGameOver;
   powerBar.innerHTML = "";
   greeting.innerHTML = "";
+  currentlyPlaying.innerHTML = "";
 }
 /** Displays a scene where the player reach game over */
 function scenePoisonGameOver() {
@@ -498,6 +513,7 @@ function scenePoisonGameOver() {
   option1.onclick = getGameOver;
   greeting.innerHTML = "";
   powerBar.innerHTML = "";
+  currentlyPlaying.innerHTML = "";
 }
 /** Displays the Greenhouse scene with choices where to go next */
 function sceneGreenhouse(version) {
@@ -557,6 +573,7 @@ function sceneGreenhouseGameOver() {
   option1.onclick = getGameOver;
   powerBar.innerHTML = "";
   greeting.innerHTML = "";
+  currentlyPlaying.innerHTML = "";
 }
 /** Displays the final game over scene when the player don't want to play again */
 function getGameOver() {
