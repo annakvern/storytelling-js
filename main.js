@@ -15,6 +15,7 @@ let gameState = {
 function main(status) {
   if (status === "start over") {
     localStorage.clear();
+    console.log("clear");
   }
 
   const savedState = localStorage.getItem("gameState");
@@ -23,6 +24,9 @@ function main(status) {
     player = gameState.playerName || "";
     powers = gameState.powersGathered || [];
     scene = gameState.currentScene || "";
+    renderPowers();
+    renderPlayerName();
+
     if (scene && typeof window[scene] === "function") {
       window[scene]();
     } else {
@@ -31,7 +35,8 @@ function main(status) {
   } else {
     loadEnterGarden();
   }
-  loadPlayerNameAndGreeting();
+
+  //loadPlayerNameAndGreeting();
   setupEventListeners();
 }
 
@@ -53,14 +58,12 @@ function loadEnterGarden() {
   const introTexts = [
     "A garden with beautiful flowers, delicious fruit and vegetables, slimey slugs and a haunted greenhouse. Never mind the tricky goblins that run around and try making a fuss of everything...",
     "You are a friendly 5-inch tall mini human-ish creature. You have all the attributes of a normal human, but if you're lucky, you might run into magic creatures in the garden that gives you powers.",
-    // "Please, my dear, enter!",
   ];
   const introButtons = ["Enter garden"];
 
   createParagraphs(introTexts);
   createButtons(introButtons);
   getPlayerName();
-  saveGameState();
   option0.onclick = sceneBricksStart;
 }
 /** Inserts an input form field that takes a name and a button that submits it */
@@ -81,43 +84,57 @@ function getPlayerName() {
 function saveName(event) {
   event.preventDefault();
   const nameInput = document.getElementById("nameInput");
-  let gameState = JSON.parse(localStorage.getItem("gameState")) || {};
+
+  const savedState = localStorage.getItem("gameState");
+  let gameState = JSON.parse(savedState) || {};
   gameState.playerName = nameInput.value;
   localStorage.setItem("gameState", JSON.stringify(gameState));
 
   localStorage.setItem("player", nameInput.value);
-  loadPlayerNameAndGreeting();
+  renderPlayerName();
+  renderPlayerGreeting();
 }
 
 /** Loads the Player name into a greeting before entering the garden */
-function loadPlayerNameAndGreeting() {
+function renderPlayerGreeting() {
   const name = localStorage.getItem("player");
   const container = document.getElementById("greeting");
 
   container.innerHTML = "";
 
   if (name) {
-    const currentPlayer = document.createElement("p");
-    currentPlayer.textContent = "Currently in garden: " + name;
-    currentlyPlaying.appendChild(currentPlayer);
     const playerGreeting = document.createElement("p");
     playerGreeting.textContent =
       "Please, my dear " + name + ", enter if you dare!";
     container.appendChild(playerGreeting);
-    disableFormAndButton(playerGreeting);
+    //disableFormAndButton(playerGreeting);
   }
   nameForm.reset();
+  nameForm.innerHTML = "";
 }
-/** Disabels the form input field and button if a greeting message exist */
-function disableFormAndButton(message) {
-  const nameInput = document.getElementById("nameInput");
-  const submitButton = document.getElementById("submitButton");
+/** Loads and renders the current player name from local storage */
+function renderPlayerName() {
+  const savedState = localStorage.getItem("gameState");
+  let gameState = JSON.parse(savedState) || {};
+  const playername = gameState.playerName;
 
-  if (message !== "") {
-    nameInput.disabled = true;
-    submitButton.className = "btn-disabled";
+  if (playername) {
+    const currentPlayer = document.createElement("p");
+    currentPlayer.textContent = "Currently in garden: " + playername;
+    currentlyPlaying.appendChild(currentPlayer);
+    //disableFormAndButton(playerGreeting);
   }
 }
+/** Disabels the form input field and button if a greeting message exist */
+//function disableFormAndButton(message) {
+// const nameInput = document.getElementById("nameInput");
+// const submitButton = document.getElementById("submitButton");
+
+// if (message !== "") {
+//   nameInput.disabled = true;
+//   submitButton.className = "btn-disabled";
+// }
+// //}
 
 /** Create as many paragraphs per story that's defined in it's specific paragraphs array */
 function createParagraphs(paragraphs) {
@@ -148,36 +165,40 @@ function createButtons(buttonTexts) {
   }
 }
 /** Loads and updates the power-bar */
-function loadAndRenderPowers(powers) {
+function renderPowers() {
   const container = document.getElementById("powerBar");
 
   container.innerHTML = "";
 
-  for (const [index, text] of powers.entries()) {
-    // I need to be able to distinguish the powers and set specific id's to assign powers specific text
-    const showPower = document.createElement("p");
-    showPower.textContent = text;
-    showPower.id = `power${index}`;
-    container.appendChild(showPower);
+  const savedState = localStorage.getItem("gameState");
+  let gameState = JSON.parse(savedState) || {};
+  const savedPowers = gameState.powersGathered || [];
+  if (savedPowers) {
+    for (const [index, text] of savedPowers.entries()) {
+      // I need to be able to distinguish the powers and set specific id's to assign powers specific text
+      const showPower = document.createElement("p");
+      showPower.textContent = text;
+      showPower.id = `power${index}`;
+      container.appendChild(showPower);
+    }
   }
 }
 /** Saves the name, scene and powers array into a gameState */
 function saveGameState() {
-  gameState.playerName = player;
   gameState.currentScene = scene;
   gameState.powersGathered = powers;
   localStorage.setItem("gameState", JSON.stringify(gameState));
 }
 
-function savePowersToLocalStorage() {
-  localStorage.setItem("powers", JSON.stringify(powers));
-}
-
+// function savePowersToLocalStorage() {
+//   localStorage.setItem("powers", JSON.stringify(powers));
+// }
+/** Loads when a power has been used and need to update the object in localStorage */
 function removePowerFromLocalStorage(powerName) {
-  const powersList = JSON.parse(localStorage.getItem("powers"));
-  const removePower = JSON.stringify(powerName);
-  const result = powersList.filter((x) => JSON.stringify(x) === removePower);
-  localStorage.setItem("powers", JSON.stringify(result));
+  const gameState = JSON.parse(localStorage.getItem("gameState"));
+  let index = gameState.powersGathered.indexOf(powerName);
+  gameState.powersGathered.splice(index, 1);
+  localStorage.setItem("gameState", JSON.stringify(gameState));
 }
 
 /** Displays the starting scene with choices where to go next */
@@ -205,8 +226,7 @@ function sceneBricksStart() {
 }
 /** Displays the Dragonfly scene, set a power, and show options where to go next */
 function sceneDragonflyPower() {
-  const savedState = localStorage.getItem("gameState");
-  gameState = JSON.parse(savedState);
+  let gameState = JSON.parse(localStorage.getItem("gameState")) || {};
 
   scene = "sceneDragonflyPower";
 
@@ -228,12 +248,12 @@ function sceneDragonflyPower() {
   option1.onclick = () => sceneKoiPower(1); // want to show the next story differently depending on where you come from
 
   // check so that gameState doesn't already include the power to be given in this scene
-  if (!savedState.includes("Ability to fly for 24 hours")) {
+  if (!gameState.powersGathered.includes("Ability to fly for 24 hours")) {
     powers.push("Ability to fly for 24 hours");
-    loadAndRenderPowers(powers);
-    savePowersToLocalStorage();
   }
+
   saveGameState();
+  renderPowers(powers);
 }
 /** Displays the scene with the Goblin with choices where to go next */
 function sceneGoblinPrank() {
@@ -307,13 +327,12 @@ function sceneKoiPower(version) {
 
   createButtons(pondButtons);
   // check if the gameState doesn't already include the power to be given in this scene
-  if (!savedState.includes("Ability to breathe under water")) {
+  if (!gameState.powersGathered.includes("Ability to breathe under water")) {
     powers.push("Ability to breathe under water");
-    loadAndRenderPowers(powers);
-    savePowersToLocalStorage();
   }
-
   saveGameState();
+  renderPowers(powers);
+
   option0.onclick = () => scenePowerClover(2);
   option1.onclick = sceneAppleWorm;
 }
@@ -357,8 +376,7 @@ function sceneGoblinGameOver() {
 }
 /** Displays the scene where player get a magical four-leaf clover with choices where to go next */
 function scenePowerClover(version) {
-  const savedState = localStorage.getItem("gameState");
-  gameState = JSON.parse(savedState);
+  let gameState = JSON.parse(localStorage.getItem("gameState")) || {};
   scene = "scenePowerClover";
   storyImg.src = "assets/images/clover.jpg";
 
@@ -381,13 +399,12 @@ function scenePowerClover(version) {
   }
 
   // check so that gameState doesn't already include the power to be given in this scene
-  if (!savedState.includes("Magical four-leaf clover")) {
+  if (!gameState.powersGathered.includes("Magical four-leaf clover")) {
     powers.push("Magical four-leaf clover");
-    loadAndRenderPowers(powers);
-    savePowersToLocalStorage();
   }
-
   saveGameState();
+  renderPowers(powers);
+
   option0.onclick = sceneWateringDevice;
   option1.onclick = sceneSneakySnail;
 }
@@ -413,9 +430,9 @@ function sceneAppleWorm() {
   let index = powers.indexOf("Ability to breathe under water");
   powers.splice(index, 1);
   removePowerFromLocalStorage("Ability to breathe under water");
-  loadAndRenderPowers(powers);
-  savePowersToLocalStorage();
+
   saveGameState();
+  renderPowers(powers);
   option0.onclick = sceneSneakySnail;
   option1.onclick = sceneSuccessGarden;
 }
@@ -460,9 +477,9 @@ function sceneWateringDevice() {
   let index = powers.indexOf("Ability to breathe under water");
   powers.splice(index, 1);
   removePowerFromLocalStorage("Ability to breathe under water");
-  savePowersToLocalStorage();
-  loadAndRenderPowers(powers);
+
   saveGameState();
+  renderPowers(powers);
   option0.onclick = sceneSuccessGarden;
   option1.onclick = sceneGreenhouse;
 }
@@ -560,10 +577,8 @@ function sceneGreenhouse(version) {
     removePowerFromLocalStorage("Magical four-leaf clover");
   }
 
-  // re-load the power array
-  loadAndRenderPowers(powers);
-  savePowersToLocalStorage();
   saveGameState();
+  renderPowers(powers);
   // Checks if the player still has the four-leaf clover
 
   if (powers.includes("Magical four-leaf clover")) {
