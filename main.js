@@ -1,12 +1,34 @@
 //can I generate alt-texts on images?
 window.addEventListener("DOMContentLoaded", main);
 let powers = [];
+let scene = "";
 const endButtons = ["Yes", "No"];
 
+let gameState = {
+  currentScene: scene,
+  powersGathered: powers,
+};
+
 /** This is the starting point for the program */
-function main() {
-  localStorage.clear();
-  loadEnterGarden();
+function main(status) {
+  if (status === "start over") {
+    localStorage.clear();
+  }
+
+  const savedState = localStorage.getItem("gameState");
+  console.log(savedState);
+  if (savedState) {
+    gameState = JSON.parse(savedState);
+    powers = gameState.powersGathered || [];
+    scene = gameState.currentScene || "";
+    if (scene && typeof window[scene] === "function") {
+      window[scene]();
+    } else {
+      loadEnterGarden();
+    }
+  } else {
+    loadEnterGarden();
+  }
   loadPlayerName();
   setupEventListeners();
 }
@@ -116,7 +138,7 @@ function createButtons(buttonTexts) {
   }
 }
 /** Loads and updates the power-bar */
-function loadPowers(powers) {
+function loadAndRenderPowers(powers) {
   const container = document.getElementById("powerBar");
 
   container.innerHTML = "";
@@ -129,8 +151,29 @@ function loadPowers(powers) {
     container.appendChild(showPower);
   }
 }
+
+function saveGameState() {
+  gameState.currentScene = scene;
+  gameState.powersGathered = powers;
+  localStorage.setItem("gameState", JSON.stringify(gameState));
+}
+
+function savePowersToLocalStorage() {
+  localStorage.setItem("powers", JSON.stringify(powers));
+}
+
+function removePowerFromLocalStorage(powerName) {
+  const powersList = JSON.parse(localStorage.getItem("powers"));
+  const removePower = JSON.stringify(powerName);
+  const result = powersList.filter((x) => JSON.stringify(x) === removePower);
+  localStorage.setItem("powers", JSON.stringify(result));
+}
+
 /** Displays the starting scene with choices where to go next */
 function sceneBricksStart() {
+  scene = "sceneBricksStart";
+  saveGameState();
+
   nameForm.innerHTML = "";
   greeting.innerHTML = "";
   const enterTexts = [
@@ -149,8 +192,10 @@ function sceneBricksStart() {
   option0.onclick = sceneDragonflyPower;
   option1.onclick = sceneGoblinPrank;
 }
-/** Displays the Dragonfly scene with choices where to go next */
+/** Displays the Dragonfly scene, set a power, and show options where to go next */
 function sceneDragonflyPower() {
+  scene = "sceneDragonflyPower";
+
   storyImg.src = "assets/images/dragonfly.jpg";
 
   const rosesTexts = [
@@ -168,10 +213,13 @@ function sceneDragonflyPower() {
   option0.onclick = sceneMudSlope;
   option1.onclick = () => sceneKoiPower(1); // want to show the next story differently depending on where you come from
   powers.push("Ability to fly for 24 hours"); // add power flying
-  loadPowers(powers);
+  loadAndRenderPowers(powers);
+  savePowersToLocalStorage();
+  saveGameState();
 }
 /** Displays the scene with the Goblin with choices where to go next */
 function sceneGoblinPrank() {
+  scene = "sceneGoblinPrank";
   storyImg.src = "assets/images/bush.jpg";
 
   const prankTexts = [
@@ -188,9 +236,11 @@ function sceneGoblinPrank() {
   createButtons(prankButtons);
   option0.onclick = () => sceneKoiPower(1);
   option1.onclick = sceneCatMeeting;
+  saveGameState();
 }
 /** Displays the scene where the player get stuck in mud with choices where to go next */
 function sceneMudSlope() {
+  scene = "sceneMudSlope";
   storyImg.src = "assets/images/mud.jpg";
 
   const mudTexts = [
@@ -206,9 +256,11 @@ function sceneMudSlope() {
   createButtons(mudButtons);
   option0.onclick = sceneGoblinGameOver;
   option1.onclick = () => scenePowerClover(1);
+  saveGameState();
 }
-/** Displays the Koi fish scene with choices where to go next */
+/** Displays the Koi fish scene, set power, and show options where to go next */
 function sceneKoiPower(version) {
+  scene = "sceneKoiPower";
   storyImg.src = "assets/images/pond.jpg";
 
   const pondTexts = [
@@ -227,21 +279,23 @@ function sceneKoiPower(version) {
   createParagraphs(pondTexts);
 
   if (version === 1) {
-    console.log("version 1");
     paragraph1.style.display = "none"; // hides the second entry in the array because it is used when coming from another scene
   } else {
-    console.log("Version 2");
     paragraph0.style.display = "none";
   }
 
   createButtons(pondButtons);
+
+  powers.push("Ability to breathe under water");
+  loadAndRenderPowers(powers);
+  savePowersToLocalStorage();
+  saveGameState();
   option0.onclick = () => scenePowerClover(2);
   option1.onclick = sceneAppleWorm;
-  powers.push("Ability to breathe under water");
-  loadPowers(powers);
 }
 /** Displays the Cat scene with choices where to go next */
 function sceneCatMeeting() {
+  scene = "sceneCatMeeting";
   storyImg.src = "assets/images/cat.jpg";
 
   const catTexts = [
@@ -253,11 +307,13 @@ function sceneCatMeeting() {
   const catButtons = ["Run, as fast as you can!", "Stay and pet the cat"];
   createParagraphs(catTexts);
   createButtons(catButtons);
+  saveGameState();
   option0.onclick = () => sceneKoiPower(2);
   option1.onclick = sceneCatGameOver;
 }
 /** Displays a scene where the player reach game over */
 function sceneGoblinGameOver() {
+  scene = "sceneGoblinGameOver";
   storyImg.src = "assets/images/mudEnd.jpg";
 
   const goblinGameOverTexts = [
@@ -267,14 +323,16 @@ function sceneGoblinGameOver() {
   ];
   createParagraphs(goblinGameOverTexts);
   createButtons(endButtons);
-  option0.onclick = main;
+  option0.onclick = () => main("start over");
   option1.onclick = getGameOver;
+  powers = [];
   powerBar.innerHTML = "";
   greeting.innerHTML = "";
-  localStorage.removeItem = "name";
+  saveGameState();
 }
 /** Displays the scene where player get a magical four-leaf clover with choices where to go next */
 function scenePowerClover(version) {
+  scene = "scenePowerClover";
   storyImg.src = "assets/images/clover.jpg";
 
   const cloverTexts = [
@@ -287,21 +345,24 @@ function scenePowerClover(version) {
   const cloverButtons = ["Go left", "Go right"];
   createParagraphs(cloverTexts);
   createButtons(cloverButtons);
+
+  //If the user comes from the scene where they need to use their flying power, remove the power from the list
+  let index = powers.indexOf("Ability to fly for 24 hours");
+  if (version === 1) {
+    powers.splice(index, 1);
+    removePowerFromLocalStorage("Ability to fly for 24 hours");
+  }
+  //Add the power Magical four-leaf-clover
+  powers.push("Magical four-leaf clover");
+  loadAndRenderPowers(powers);
+  savePowersToLocalStorage();
+  saveGameState();
   option0.onclick = sceneWateringDevice;
   option1.onclick = sceneSneakySnail;
-  // remove power flying
-
-  if (version === 1 && powers[1] === "Ability to fly for 24 hours") {
-    powers.splice(1, 1);
-  } else if (version === 1 && powers[0] === "Ability to fly for 24 hours") {
-    powers.splice(0, 1);
-  } else {
-  }
-  powers.push("Magical four-leaf clover");
-  loadPowers(powers);
 }
 /** Displays the apple and worm scene with choices where to go next */
 function sceneAppleWorm() {
+  scene = "sceneAppleWorm";
   storyImg.src = "assets/images/apple.jpg";
 
   const appleTexts = [
@@ -317,19 +378,19 @@ function sceneAppleWorm() {
   createParagraphs(appleTexts);
   createButtons(appleButtons);
 
-  if (powers[1] === "Ability to breathe under water") {
-    powers.splice(1, 1);
-  } else if (powers[0] === "Ability to breathe under water") {
-    powers.splice(0, 1);
-  } else {
-  }
-
-  loadPowers(powers);
+  //remove ability as it was used
+  let index = powers.indexOf("Ability to breathe under water");
+  powers.splice(index, 1);
+  removePowerFromLocalStorage("Ability to breathe under water");
+  loadAndRenderPowers(powers);
+  savePowersToLocalStorage();
+  saveGameState();
   option0.onclick = sceneSneakySnail;
   option1.onclick = sceneSuccessGarden;
 }
 /** Displays a scene where the player reach game over */
 function sceneCatGameOver() {
+  scene = "sceneCatGameOver";
   storyImg.src = "assets/images/catEnd.jpg";
 
   const catGameOverTexts = [
@@ -340,14 +401,15 @@ function sceneCatGameOver() {
   createParagraphs(catGameOverTexts);
   createButtons(endButtons);
 
-  option0.onclick = main;
+  option0.onclick = () => main("start over");
   option1.onclick = getGameOver;
   powerBar.innerHTML = "";
   greeting.innerHTML = "";
-  localStorage.removeItem = "name";
+  saveGameState();
 }
 /** Displays the watering  scene with choices where to go next */
 function sceneWateringDevice() {
+  scene = "sceneWateringDevice";
   storyImg.src = "assets/images/watering.jpg";
 
   const wateringTexts = [
@@ -361,21 +423,20 @@ function sceneWateringDevice() {
   ];
   createParagraphs(wateringTexts);
   createButtons(wateringButtons);
+
+  // remove the ability to breathe under water power
+  let index = powers.indexOf("Ability to breathe under water");
+  powers.splice(index, 1);
+  removePowerFromLocalStorage("Ability to breathe under water");
+  savePowersToLocalStorage();
+  loadAndRenderPowers(powers);
+  saveGameState();
   option0.onclick = sceneSuccessGarden;
   option1.onclick = sceneGreenhouse;
-  // remove power flying
-
-  if (powers[1] === "Ability to breathe under water") {
-    powers.splice(1, 1);
-  } else if (powers[0] === "Ability to breathe under water") {
-    powers.splice(0, 1);
-  } else {
-  }
-
-  loadPowers(powers);
 }
 /** Displays the sneaky snail scene with choices where to go next */
 function sceneSneakySnail() {
+  scene = "sceneSneakySnail";
   storyImg.src = "assets/images/snail.jpg";
 
   const sneakySnailTexts = [
@@ -396,11 +457,13 @@ function sceneSneakySnail() {
   } else {
     option0.style.display = "none";
   }
+  saveGameState();
   option0.onclick = () => sceneGreenhouse(1);
   option1.onclick = scenePoisonGameOver;
 }
 /** Displays the success finishing scene where the player reach the end of the game! */
 function sceneSuccessGarden() {
+  scene = "sceneSuccessGarden";
   storyImg.src = "assets/images/end.jpg";
 
   const successEndTexts = [
@@ -412,13 +475,15 @@ function sceneSuccessGarden() {
   ];
   createParagraphs(successEndTexts);
   createButtons(endButtons);
-
-  option0.onclick = main;
+  saveGameState();
+  option0.onclick = () => main("start over");
   option1.onclick = getGameOver;
   powerBar.innerHTML = "";
+  greeting.innerHTML = "";
 }
 /** Displays a scene where the player reach game over */
 function scenePoisonGameOver() {
+  scene = "scenePoisonGameOver";
   storyImg.src = "assets/images/poison.jpg";
 
   const poisonGameOverTexts = [
@@ -428,15 +493,15 @@ function scenePoisonGameOver() {
   ];
   createParagraphs(poisonGameOverTexts);
   createButtons(endButtons);
-
-  option0.onclick = main;
+  saveGameState();
+  option0.onclick = () => main("start over");
   option1.onclick = getGameOver;
   greeting.innerHTML = "";
   powerBar.innerHTML = "";
-  localStorage.removeItem = "name";
 }
 /** Displays the Greenhouse scene with choices where to go next */
 function sceneGreenhouse(version) {
+  scene = "sceneGreenhouse";
   storyImg.src = "assets/images/greenhouse.jpg";
 
   const greenhouseTexts = [
@@ -454,21 +519,17 @@ function sceneGreenhouse(version) {
   createButtons(greenhouseButtons);
 
   //Checks which scene the player enters this scene from and removes power if they come from verson 1
-  if (version === 1 && powers[1] === "Magical four-leaf clover") {
-    powers.splice(1, 1);
-    console.log("1");
-  } else if (version === 1 && powers[0] === "Magical four-leaf clover") {
-    powers.splice(0, 1);
-    console.log("2");
-  } else if (version === 1 && powers[2] === "Magical four-leaf clover") {
-    powers.pop();
-    console.log("3");
-  } else {
+  let index = powers.indexOf("Magical four-leaf clover");
+
+  if (version === 1) {
+    powers.splice(index, 1);
+    removePowerFromLocalStorage("Magical four-leaf clover");
   }
 
   // re-load the power array
-  loadPowers(powers);
-
+  loadAndRenderPowers(powers);
+  savePowersToLocalStorage();
+  saveGameState();
   // Checks if the player still has the four-leaf clover
 
   if (powers.includes("Magical four-leaf clover")) {
@@ -477,10 +538,11 @@ function sceneGreenhouse(version) {
     option0.style.display = "none";
   }
   option0.onclick = sceneSuccessGarden;
-  option1.onclick = storyGreenhouseGameOver;
+  option1.onclick = sceneGreenhouseGameOver;
 }
 /** Displays a scene where the player reach game over */
-function storyGreenhouseGameOver() {
+function sceneGreenhouseGameOver() {
+  scene = "storyGreenhouseGameOver";
   storyImg.src = "assets/images/wasps.jpg";
 
   const greenhouseGameOverTexts = [
@@ -490,20 +552,21 @@ function storyGreenhouseGameOver() {
   ];
   createParagraphs(greenhouseGameOverTexts);
   createButtons(endButtons);
-
-  option0.onclick = main;
+  saveGameState();
+  option0.onclick = () => main("start over");
   option1.onclick = getGameOver;
   powerBar.innerHTML = "";
   greeting.innerHTML = "";
-  localStorage.removeItem = "name";
 }
 /** Displays the final game over scene when the player don't want to play again */
 function getGameOver() {
+  scene = "getGameOver";
   const gameOverTexts = ["Thanks for playing!", "You can close this window."];
   const gameOverButtons = ["OK, close window"];
   storyImg.src = "assets/images/roses.jpg";
   createParagraphs(gameOverTexts);
   createButtons(gameOverButtons);
   localStorage.removeItem = "name";
+  saveGameState();
   option0.onclick = window.close;
 }
