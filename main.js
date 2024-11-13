@@ -114,7 +114,6 @@ function disableFormAndButton(message) {
   const submitButton = document.getElementById("submitButton");
 
   if (message !== "") {
-    nameInput.placeholder = "";
     nameInput.disabled = true;
     submitButton.className = "btn-disabled";
   }
@@ -206,6 +205,9 @@ function sceneBricksStart() {
 }
 /** Displays the Dragonfly scene, set a power, and show options where to go next */
 function sceneDragonflyPower() {
+  const savedState = localStorage.getItem("gameState");
+  gameState = JSON.parse(savedState);
+
   scene = "sceneDragonflyPower";
 
   storyImg.src = "assets/images/dragonfly.jpg";
@@ -224,9 +226,13 @@ function sceneDragonflyPower() {
   createButtons(rosesButtons);
   option0.onclick = sceneMudSlope;
   option1.onclick = () => sceneKoiPower(1); // want to show the next story differently depending on where you come from
-  powers.push("Ability to fly for 24 hours"); // add power flying
-  loadAndRenderPowers(powers);
-  savePowersToLocalStorage();
+
+  // check so that gameState doesn't already include the power to be given in this scene
+  if (!savedState.includes("Ability to fly for 24 hours")) {
+    powers.push("Ability to fly for 24 hours");
+    loadAndRenderPowers(powers);
+    savePowersToLocalStorage();
+  }
   saveGameState();
 }
 /** Displays the scene with the Goblin with choices where to go next */
@@ -272,6 +278,9 @@ function sceneMudSlope() {
 }
 /** Displays the Koi fish scene, set power, and show options where to go next */
 function sceneKoiPower(version) {
+  const savedState = localStorage.getItem("gameState");
+  gameState = JSON.parse(savedState);
+
   scene = "sceneKoiPower";
   storyImg.src = "assets/images/pond.jpg";
 
@@ -297,10 +306,13 @@ function sceneKoiPower(version) {
   }
 
   createButtons(pondButtons);
+  // check if the gameState doesn't already include the power to be given in this scene
+  if (!savedState.includes("Ability to breathe under water")) {
+    powers.push("Ability to breathe under water");
+    loadAndRenderPowers(powers);
+    savePowersToLocalStorage();
+  }
 
-  powers.push("Ability to breathe under water");
-  loadAndRenderPowers(powers);
-  savePowersToLocalStorage();
   saveGameState();
   option0.onclick = () => scenePowerClover(2);
   option1.onclick = sceneAppleWorm;
@@ -345,6 +357,8 @@ function sceneGoblinGameOver() {
 }
 /** Displays the scene where player get a magical four-leaf clover with choices where to go next */
 function scenePowerClover(version) {
+  const savedState = localStorage.getItem("gameState");
+  gameState = JSON.parse(savedState);
   scene = "scenePowerClover";
   storyImg.src = "assets/images/clover.jpg";
 
@@ -365,10 +379,14 @@ function scenePowerClover(version) {
     powers.splice(index, 1);
     removePowerFromLocalStorage("Ability to fly for 24 hours");
   }
-  //Add the power Magical four-leaf-clover
-  powers.push("Magical four-leaf clover");
-  loadAndRenderPowers(powers);
-  savePowersToLocalStorage();
+
+  // check so that gameState doesn't already include the power to be given in this scene
+  if (!savedState.includes("Magical four-leaf clover")) {
+    powers.push("Magical four-leaf clover");
+    loadAndRenderPowers(powers);
+    savePowersToLocalStorage();
+  }
+
   saveGameState();
   option0.onclick = sceneWateringDevice;
   option1.onclick = sceneSneakySnail;
