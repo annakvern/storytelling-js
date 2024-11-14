@@ -36,7 +36,6 @@ function main(status) {
     loadEnterGarden();
   }
 
-  //loadPlayerNameAndGreeting();
   setupEventListeners();
 }
 
@@ -60,11 +59,11 @@ function loadEnterGarden() {
     "You are a friendly 5-inch tall mini human-ish creature. You have all the attributes of a normal human, but if you're lucky, you might run into magic creatures in the garden that gives you powers.",
   ];
   const introButtons = ["Enter garden"];
-
+  getPlayerName();
   createParagraphs(introTexts);
   createButtons(introButtons);
-  getPlayerName();
   option0.onclick = sceneBricksStart;
+  saveGameState();
 }
 /** Inserts an input form field that takes a name and a button that submits it */
 function getPlayerName() {
@@ -85,19 +84,17 @@ function saveName(event) {
   event.preventDefault();
   const nameInput = document.getElementById("nameInput");
 
-  const savedState = localStorage.getItem("gameState");
-  let gameState = JSON.parse(savedState) || {};
+  const savedState = localStorage.getItem("gameState") || gameState;
+  gameState = JSON.parse(savedState) || {};
   gameState.playerName = nameInput.value;
-  localStorage.setItem("gameState", JSON.stringify(gameState));
-
-  localStorage.setItem("player", nameInput.value);
+  saveGameState();
   renderPlayerName();
   renderPlayerGreeting();
 }
 
 /** Loads the Player name into a greeting before entering the garden */
 function renderPlayerGreeting() {
-  const name = localStorage.getItem("player");
+  const name = gameState.playerName || "";
   const container = document.getElementById("greeting");
 
   container.innerHTML = "";
@@ -122,19 +119,8 @@ function renderPlayerName() {
     const currentPlayer = document.createElement("p");
     currentPlayer.textContent = "Currently in garden: " + playername;
     currentlyPlaying.appendChild(currentPlayer);
-    //disableFormAndButton(playerGreeting);
   }
 }
-/** Disabels the form input field and button if a greeting message exist */
-//function disableFormAndButton(message) {
-// const nameInput = document.getElementById("nameInput");
-// const submitButton = document.getElementById("submitButton");
-
-// if (message !== "") {
-//   nameInput.disabled = true;
-//   submitButton.className = "btn-disabled";
-// }
-// //}
 
 /** Create as many paragraphs per story that's defined in it's specific paragraphs array */
 function createParagraphs(paragraphs) {
