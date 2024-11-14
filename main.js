@@ -595,8 +595,7 @@ function sceneGreenhouseGameOver() {
 /** Displays the final game over scene when the player don't want to play again */
 function getGameOver() {
   scene = "getGameOver";
-  const gameOverTexts = ["Thanks for playing!", "You can close this window."];
-  const gameOverButtons = ["OK, close window"];
+  const gameOverTexts = ["Thanks for playing!", "You may close this window."];
   storyImg.src = "assets/images/roses.jpg";
   createParagraphs(gameOverTexts);
   createButtons(gameOverButtons);
