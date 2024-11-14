@@ -8,6 +8,7 @@
 ---
 ![Screenshot 2024-11-14 at 15 20 11](https://github.com/user-attachments/assets/c89b52df-4731-4ba1-b0a3-d497d3186c2e)
 ---
+[Link to Goblin's Garden on GitHub Pages](https://annakvern.github.io/storytelling-js/)
 ### Information about this storytelling / game
 The assignment was to:
 - Present information on the page with text, images, sound or video
