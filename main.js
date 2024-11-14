@@ -104,7 +104,6 @@ function renderPlayerGreeting() {
     playerGreeting.textContent =
       "Please, my dear " + name + ", enter if you dare!";
     container.appendChild(playerGreeting);
-    //disableFormAndButton(playerGreeting);
   }
   nameForm.reset();
   nameForm.innerHTML = "";
@@ -176,9 +175,6 @@ function saveGameState() {
   localStorage.setItem("gameState", JSON.stringify(gameState));
 }
 
-// function savePowersToLocalStorage() {
-//   localStorage.setItem("powers", JSON.stringify(powers));
-// }
 /** Loads when a power has been used and need to update the object in localStorage */
 function removePowerFromLocalStorage(powerName) {
   const gameState = JSON.parse(localStorage.getItem("gameState"));
