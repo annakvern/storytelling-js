@@ -164,24 +164,27 @@ footer {
 }
 
 @media only screen and (max-width: 1700px) {
-  section {
+  #story {
     width: 70vw;
   }
 }
 
 @media only screen and (max-width: 1400px) {
-  section {
+  #story {
     width: 70vw;
   }
 }
 
 @media only screen and (max-width: 1000px) {
-  section {
+  #story {
     width: 80vw;
   }
 }
 
 @media only screen and (max-width: 800px) {
+  #story {
+    width: 90vw;
+  }
   .content-container {
     flex-wrap: wrap;
   }

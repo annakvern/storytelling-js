@@ -1,4 +1,3 @@
-//can I generate alt-texts on images?
 window.addEventListener("DOMContentLoaded", main);
 let powers = [];
 let scene = "";
@@ -15,7 +14,7 @@ let gameState = {
 function main(status) {
   if (status === "start over") {
     localStorage.clear();
-    console.log("clear");
+    console.log(localStorage.getItem("gameState"));
   }
 
   const savedState = localStorage.getItem("gameState");
@@ -36,11 +35,11 @@ function main(status) {
     loadEnterGarden();
   }
 
-  setupEventListeners();
+  setupSaveNameListener();
 }
 
-/** Register all events for buttons and other ui elements */
-function setupEventListeners() {
+/** Register event for saving the name */
+function setupSaveNameListener() {
   const nameForm = document.getElementById("nameForm");
   nameForm.addEventListener("submit", saveName);
 }
@@ -154,6 +153,9 @@ function renderPowers() {
   const container = document.getElementById("powerBar");
 
   container.innerHTML = "";
+  const yourPowers = document.createElement("p");
+  yourPowers.textContent = "Your powers: ";
+  container.appendChild(yourPowers);
 
   const savedState = localStorage.getItem("gameState");
   let gameState = JSON.parse(savedState) || {};
@@ -235,7 +237,7 @@ function sceneDragonflyPower() {
   }
 
   saveGameState();
-  renderPowers(powers);
+  renderPowers();
 }
 /** Displays the scene with the Goblin with choices where to go next */
 function sceneGoblinPrank() {
@@ -313,7 +315,7 @@ function sceneKoiPower(version) {
     powers.push("Ability to breathe under water");
   }
   saveGameState();
-  renderPowers(powers);
+  renderPowers();
 
   option0.onclick = () => scenePowerClover(2);
   option1.onclick = sceneAppleWorm;
@@ -385,7 +387,7 @@ function scenePowerClover(version) {
     powers.push("Magical four-leaf clover");
   }
   saveGameState();
-  renderPowers(powers);
+  renderPowers();
 
   option0.onclick = sceneWateringDevice;
   option1.onclick = sceneSneakySnail;
@@ -414,7 +416,7 @@ function sceneAppleWorm() {
   removePowerFromLocalStorage("Ability to breathe under water");
 
   saveGameState();
-  renderPowers(powers);
+  renderPowers();
   option0.onclick = sceneSneakySnail;
   option1.onclick = sceneSuccessGarden;
 }
@@ -461,7 +463,7 @@ function sceneWateringDevice() {
   removePowerFromLocalStorage("Ability to breathe under water");
 
   saveGameState();
-  renderPowers(powers);
+  renderPowers();
   option0.onclick = sceneSuccessGarden;
   option1.onclick = sceneGreenhouse;
 }
@@ -560,7 +562,7 @@ function sceneGreenhouse(version) {
   }
 
   saveGameState();
-  renderPowers(powers);
+  renderPowers();
   // Checks if the player still has the four-leaf clover
 
   if (powers.includes("Magical four-leaf clover")) {
@@ -598,7 +600,5 @@ function getGameOver() {
   storyImg.src = "assets/images/roses.jpg";
   createParagraphs(gameOverTexts);
   createButtons(gameOverButtons);
-  localStorage.removeItem = "name";
   saveGameState();
-  option0.onclick = window.close;
 }
