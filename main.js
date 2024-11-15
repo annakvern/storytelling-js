@@ -36,7 +36,6 @@ let gameState = {
 function main(status) {
   if (status === "start over") {
     localStorage.clear();
-    console.log(localStorage.getItem("gameState"));
   }
 
   const savedState = localStorage.getItem("gameState");
