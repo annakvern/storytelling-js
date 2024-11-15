@@ -110,6 +110,7 @@ p {
   text-align: center;
   color: rgb(250, 4, 103);
   text-shadow: #eefbf0 1px 0 5px;
+  margin-top: 1rem;
 }
 
 #buttonContainer {

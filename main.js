@@ -234,6 +234,7 @@ function sceneBricksStart() {
   storyImg.src = "assets/images/enter.jpg";
   createParagraphs(enterTexts);
   title.innerHTML = "";
+  story.style.paddingTop = "0";
   saveGameState();
   createButtons(enterButtons);
   option0.onclick = sceneDragonflyPower;
@@ -258,6 +259,7 @@ function sceneDragonflyPower() {
   ];
   createParagraphs(rosesTexts);
   title.innerHTML = "";
+  story.style.paddingTop = "0";
   createButtons(rosesButtons);
   option0.onclick = sceneMudSlope;
   option1.onclick = () => sceneKoiPower(1); // want to show the next story differently depending on where you come from
