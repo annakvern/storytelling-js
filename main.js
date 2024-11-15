@@ -1,16 +1,38 @@
 window.addEventListener("DOMContentLoaded", main);
-let powers = [];
-let scene = "";
+
+/**
+ * @type {String} A string representing the name the player input starting the game
+ */
 let player = "";
+
+/**
+ * @type {Array<String>} An array of powers the player collects and uses throughout the game
+ */
+let powers = [];
+
+/**
+ * @type {String} A string with the scene name that changes for every scene
+ */
+let scene = "";
+
+/**
+ * @type {Array<String>}
+ */
 const endButtons = ["Yes", "No"];
 
+/**
+ * Game state data (name, scene and powers) stored in localStorage
+ * @typedef {{playerName: string, currentScene: string, powersGathered: Array<String>}} gameState
+ */
 let gameState = {
   playerName: player,
   currentScene: scene,
   powersGathered: powers,
 };
 
-/** This is the starting point for the program */
+/** This is the starting point for the program
+ * @param {string} status A string to say the player wants to start over and clear the localStorage
+ */
 function main(status) {
   if (status === "start over") {
     localStorage.clear();
@@ -78,7 +100,10 @@ function getPlayerName() {
   submitButton.style.marginLeft = "1.5rem";
   form.appendChild(submitButton);
 }
-/** Saves the name entered by the player to localStorage */
+
+/** Saves the name entered by the player to localStorag
+ * @param {SubmitEvent} event SubmitEvent on input field for saved name
+ */
 function saveName(event) {
   event.preventDefault();
   const nameInput = document.getElementById("nameInput");
@@ -120,7 +145,9 @@ function renderPlayerName() {
   }
 }
 
-/** Create as many paragraphs per story that's defined in it's specific paragraphs array */
+/** Create as many paragraphs per story that's defined in it's specific paragraphs array
+ * @param {Array<String>} paragraphs An array with paragraph texts for each scene
+ */
 function createParagraphs(paragraphs) {
   const container = document.getElementById("textContainer");
 
@@ -134,7 +161,9 @@ function createParagraphs(paragraphs) {
   }
 }
 
-/** Create as many buttons per story that's defined in it's specific buttonTexts array */
+/** Create as many buttons per story that's defined in it's specific buttonTexts array
+ * @param {Array<String>} buttonTexts An array with button texts for each button in the scene
+ */
 function createButtons(buttonTexts) {
   const container = document.getElementById("buttonContainer");
 
@@ -177,7 +206,9 @@ function saveGameState() {
   localStorage.setItem("gameState", JSON.stringify(gameState));
 }
 
-/** Loads when a power has been used and need to update the object in localStorage */
+/** Loads when a power has been used and need to update the object in localStorage
+ * @param {string} powerName A string with the name of the power a player collets
+ */
 function removePowerFromLocalStorage(powerName) {
   const gameState = JSON.parse(localStorage.getItem("gameState"));
   let index = gameState.powersGathered.indexOf(powerName);
@@ -280,7 +311,9 @@ function sceneMudSlope() {
   option1.onclick = () => scenePowerClover(1);
   saveGameState();
 }
-/** Displays the Koi fish scene, set power, and show options where to go next */
+/** Displays the Koi fish scene, set power, and show options where to go next
+ * @param {number} version A number representing the version of origin the player came from, this scene has more than one entry point
+ */
 function sceneKoiPower(version) {
   const savedState = localStorage.getItem("gameState");
   gameState = JSON.parse(savedState);
@@ -358,7 +391,9 @@ function sceneGoblinGameOver() {
   currentlyPlaying.innerHTML = "";
   saveGameState();
 }
-/** Displays the scene where player get a magical four-leaf clover with choices where to go next */
+/** Displays the scene where player get a magical four-leaf clover with choices where to go next
+ * @param {number} version A number representing the version of origin the player came from, this scene has more than one entry point
+ */
 function scenePowerClover(version) {
   let gameState = JSON.parse(localStorage.getItem("gameState")) || {};
   scene = "scenePowerClover";
@@ -534,7 +569,9 @@ function scenePoisonGameOver() {
   powerBar.innerHTML = "";
   currentlyPlaying.innerHTML = "";
 }
-/** Displays the Greenhouse scene with choices where to go next */
+/** Displays the Greenhouse scene with choices where to go next
+ * @param {number} version A number representing the version of origin the player came from, this scene has more than one entry point
+ */
 function sceneGreenhouse(version) {
   scene = "sceneGreenhouse";
   storyImg.src = "assets/images/greenhouse.jpg";
